@@ -38,6 +38,9 @@ letters_dict = {
 
 
 def convert_dict_to_list(dict_: dict) -> list:
+    """
+    Конвертирует словарь букв в список
+    """
     list_ = []
 
     for letter, count in dict_.items():
@@ -51,6 +54,9 @@ list_of_letters = convert_dict_to_list(letters_dict)
 
 
 def get_random_letters(player: list, count: int):
+    """
+    Добавляет рандомные буква во входной список извлекая из основного
+    """
     if len(list_of_letters) == 0:
         print("В мешочке не осталось буковок... :(")
         return
@@ -64,6 +70,9 @@ def get_random_letters(player: list, count: int):
 
 
 def start_game() -> list:
+    """
+    Приветствует игрока, спрашивает имя
+    """
     print("Привет.\nМы начинаем играть в Scrabble!\n")
     while True:
         name1 = input("Введите имя первого игрока: ").strip()
@@ -84,6 +93,9 @@ def start_game() -> list:
 
 
 def is_word_exist(word: str) -> bool:
+    """
+    Проверяет строку на наличие его в файле со словами
+    """
     with open('russian_word.txt', encoding="UTF-8") as file:
         for row in file:
             if word == row.strip():
@@ -92,6 +104,9 @@ def is_word_exist(word: str) -> bool:
 
 
 def get_word_from_letters(word: str, letters: list) -> bool:
+    """
+    Удаляет буквы слова из списка если все они есть в этом списке
+    """
     tmp = []
     tmp.extend(letters)
     try:
@@ -105,6 +120,9 @@ def get_word_from_letters(word: str, letters: list) -> bool:
 
 
 def count_points(word: str) -> int:
+    """
+    Считает заработанные очки
+    """
     len_ = len(word)
     if len_ <= 3:
         points = len_
@@ -114,6 +132,7 @@ def count_points(word: str) -> int:
 
 
 def game_turn(name:str, player: list) -> int:
+    """проигрывает один кон, возвращает количество заработанных за ход очков"""
     print(f"Ходит {name}")
     player_word = input("Введите слово: ").strip().lower()
     while player_word in used_words:
@@ -136,6 +155,9 @@ def game_turn(name:str, player: list) -> int:
 
 
 def print_result(name1, score1, name2, score2):
+    """
+    Выводит на экран результат игры
+    """
     if score1 > score2:
         print(f"Победитель: {name1}!!!\nСчёт: {score1}:{score2}")
     elif score2 > score1:
