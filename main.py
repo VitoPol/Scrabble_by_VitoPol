@@ -136,6 +136,9 @@ def game_turn(name:str, player: list) -> int:
     """проигрывает один кон, возвращает количество заработанных за ход очков"""
     print(f"Ходит {name}")
     player_word = input("Введите слово: ").strip().lower()
+    if player_word == "":
+        print("Пропуск хода\n")
+        return 0
     while player_word in used_words:
         player_word = input("Уже было...\nВведите новое слово: ").strip().lower()
     if player_word == "stop":
