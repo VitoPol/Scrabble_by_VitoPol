@@ -97,10 +97,11 @@ def is_word_exist(word: str) -> bool:
     Проверяет строку на наличие его в файле со словами
     """
     with open('russian_word.txt', encoding="UTF-8") as file:
-        for row in file:
-            if word == row.strip():
-                return True
-        return False
+        content = file.read().split("\n")
+    for row in content:
+        if word == row.strip():
+            return True
+    return False
 
 
 def get_word_from_letters(word: str, letters: list) -> bool:
