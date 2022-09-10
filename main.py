@@ -36,6 +36,8 @@ letters_dict = {
     "я": 2
 }
 
+with open('russian_word.txt', encoding="UTF-8") as file:
+    content = file.read().split("\n")
 
 def convert_dict_to_list(dict_: dict) -> list:
     """
@@ -96,29 +98,32 @@ def is_word_exist(word: str) -> bool:
     """
     Проверяет строку на наличие его в файле со словами
     """
-    with open('russian_word.txt', encoding="UTF-8") as file:
-        content = file.read().split("\n")
     for row in content:
         if word == row.strip():
             return True
     return False
 
 
-def get_word_from_letters(word: str, letters: list) -> bool:
+def get_word_from_letters(word: str, letters: list):
     """
-    Удаляет буквы слова из списка если все они есть в этом списке
+    Удаляет буквы слова из списка
+    """
+    for letter in word:
+        letters.remove(letter)
+
+
+def is_posible_to_combine(word: str, letters: list) -> bool:
+    """
+    проверяет возможность собрать слово из букв
     """
     tmp = []
     tmp.extend(letters)
     try:
         for letter in word:
             tmp.remove(letter)
-        letters.clear()
-        letters.extend(tmp)
         return True
     except:
         return False
-
 
 def count_points(word: str) -> int:
     """
@@ -139,19 +144,23 @@ def game_turn(name:str, player: list) -> int:
     if player_word == "":
         print("Пропуск хода\n")
         return 0
-    while player_word in used_words:
-        player_word = input("Уже было...\nВведите новое слово: ").strip().lower()
-    if player_word == "stop":
-        return None
+    while True:
+        if player_word == "stop":
+            return None
+        if not is_posible_to_combine(player_word, player):
+            player_word = input("У вас не хватает букв\nВведите новое слово: ").strip().lower()
+            continue
+        elif player_word in used_words:
+            player_word = input("Уже было...\nВведите новое слово: ").strip().lower()
+            continue
+        break
     if is_word_exist(player_word):
-        if get_word_from_letters(player_word, player):
-            points = count_points(player_word)
-            print(f"Хороший ход!\nВаш счёт увеличивается на {points}!\n")
-            get_random_letters(player, len(player_word) + 1)
-            used_words.append(player_word)
-            return points
-        else:
-            print("Не собрать такое слово\n")
+        get_word_from_letters(player_word, player)
+        points = count_points(player_word)
+        print(f"Хороший ход!\nВаш счёт увеличивается на {points}!\n")
+        get_random_letters(player, len(player_word) + 1)
+        used_words.append(player_word)
+        return points
     else:
         print("Нет такого слова\n")
     get_random_letters(player, 1)
